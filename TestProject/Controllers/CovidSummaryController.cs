@@ -30,7 +30,7 @@ namespace TestProject.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllSummary()
         {
-            var summary = await _unitOfWork.Summaries.GetAll(new List<string> { "Global","Countries" });
+            var summary = await _unitOfWork.Summaries.GetAll(new List<string> { "Global", "Countries" });
             var result = _mapper.Map<List<CovidSummary>>(summary);
             return Ok(result);
         }
@@ -63,48 +63,34 @@ namespace TestProject.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateSummary(Guid id, [FromBody] CovidSummary covidSummary)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                var summary = await _unitOfWork.Summaries.Get(q => q.ID == id, new List<string> { "Global", "Countries" });
-                _mapper.Map(covidSummary, summary);
-                _unitOfWork.Summaries.Update(summary);
-
-                _unitOfWork.Global.Update(summary.Global);
-
-                foreach (var item in summary.Countries)
-                {
-                    _unitOfWork.Countries.Update(item);
-                }
-
-                await _unitOfWork.Save();
-                return Ok("Summary has been updated...");
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
+
+            var summary = await _unitOfWork.Summaries.Get(q => q.ID == id, new List<string> { "Global", "Countries" });
+            _mapper.Map(covidSummary, summary);
+            _unitOfWork.Summaries.Update(summary);
+
+            _unitOfWork.Global.Update(summary.Global);
+
+            foreach (var item in summary.Countries)
             {
-                return BadRequest(ex);
+                _unitOfWork.Countries.Update(item);
             }
+
+            await _unitOfWork.Save();
+            return Ok("Summary has been updated...");
         }
 
         [Authorize]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteSummary(Guid id)
         {
-            try
-            {
-                var country = await _unitOfWork.Summaries.Get(q => q.ID == id);
-                await _unitOfWork.Summaries.Delete(id);
-                await _unitOfWork.Save();
-                return Ok("Summary has been deleted...");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            var country = await _unitOfWork.Summaries.Get(q => q.ID == id);
+            await _unitOfWork.Summaries.Delete(id);
+            await _unitOfWork.Save();
+            return Ok("Summary has been deleted...");
         }
 
     }

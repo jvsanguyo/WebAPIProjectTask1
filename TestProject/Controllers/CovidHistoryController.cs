@@ -63,40 +63,26 @@ namespace TestProject.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateHistory(int id, [FromBody] CovidHistory covidHistory)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
+                return BadRequest(ModelState);
+            }
 
-                var history = await _unitOfWork.Histories.Get(q => q.Id == id);
-                _mapper.Map(covidHistory, history);
-                _unitOfWork.Histories.Update(history);
-                await _unitOfWork.Save();
-                return Ok("History has been updated...");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            var history = await _unitOfWork.Histories.Get(q => q.Id == id);
+            _mapper.Map(covidHistory, history);
+            _unitOfWork.Histories.Update(history);
+            await _unitOfWork.Save();
+            return Ok("History has been updated...");
         }
 
         [Authorize]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteHistory(int id)
         {
-            try
-            {
-                var country = await _unitOfWork.Histories.Get(q => q.Id == id);
-                await _unitOfWork.Histories.Delete(id);
-                await _unitOfWork.Save();
-                return Ok("History has been deleted...");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            var country = await _unitOfWork.Histories.Get(q => q.Id == id);
+            await _unitOfWork.Histories.Delete(id);
+            await _unitOfWork.Save();
+            return Ok("History has been deleted...");
         }
     }
 }
