@@ -7,7 +7,7 @@ namespace TestProject.Data
 {
     public class History
     {
-        public int Id { get; set; }
+        public Guid ID { get; set; }
         public string Country { get; set; }
         public string CountryCode { get; set; }
         public string Province { get; set; }

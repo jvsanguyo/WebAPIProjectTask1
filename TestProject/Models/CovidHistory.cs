@@ -7,6 +7,7 @@ namespace TestProject.Models
 {
     public class CovidHistory
     {
+        public Guid ID { get; set; }
         public string Country { get; set; }
         public string CountryCode { get; set; }
         public string Province { get; set; }

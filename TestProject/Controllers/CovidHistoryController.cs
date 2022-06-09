@@ -35,10 +35,10 @@ namespace TestProject.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id:int}", Name = "GetHistory")]
-        public async Task<IActionResult> GetHistory(int id)
+        [HttpGet("{id:guid}", Name = "GetHistory")]
+        public async Task<IActionResult> GetHistory(Guid id)
         {
-            var history = await _unitOfWork.Histories.Get(q => q.Id == id);
+            var history = await _unitOfWork.Histories.Get(q => q.ID == id);
             var result = _mapper.Map<CovidHistory>(history);
             return Ok(result);
         }
@@ -56,19 +56,19 @@ namespace TestProject.Controllers
             await _unitOfWork.Histories.Insert(history);
             await _unitOfWork.Save();
 
-            return CreatedAtRoute("GetHistory", new { id = history.Id }, covidHistory);
+            return CreatedAtRoute("GetHistory", new { id = history.ID }, covidHistory);
         }
 
         [Authorize]
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateHistory(int id, [FromBody] CovidHistory covidHistory)
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdateHistory(Guid id, [FromBody] CovidHistory covidHistory)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var history = await _unitOfWork.Histories.Get(q => q.Id == id);
+            var history = await _unitOfWork.Histories.Get(q => q.ID == id);
             _mapper.Map(covidHistory, history);
             _unitOfWork.Histories.Update(history);
             await _unitOfWork.Save();
@@ -76,10 +76,10 @@ namespace TestProject.Controllers
         }
 
         [Authorize]
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteHistory(int id)
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteHistory(Guid id)
         {
-            var country = await _unitOfWork.Histories.Get(q => q.Id == id);
+            var country = await _unitOfWork.Histories.Get(q => q.ID == id);
             await _unitOfWork.Histories.Delete(id);
             await _unitOfWork.Save();
             return Ok("History has been deleted...");

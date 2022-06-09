@@ -48,16 +48,19 @@ namespace TestProject.Controllers
         [Route("getcovidhistory")]
         public async Task<IActionResult> GetCovidHistory(string country)
         {
-            if (!_unitOfWork.HasHistoryData())
+            var results = await _commandDataClient.GetHistory(country);
+            foreach (var item in results)
             {
-                var result = await _commandDataClient.GetHistory(country);
-                var histories = _mapper.Map<List<History>>(result);
-                await _unitOfWork.Histories.InsertRange(histories);
-                await _unitOfWork.Save();
-                return Ok("Covid History Data has been saved...");
+                var data = await _unitOfWork.Histories.Get(q => q.ID == item.ID);
+                if (data == null)
+                {
+                    var history = _mapper.Map<History>(item);
+                    await _unitOfWork.Histories.Insert(history);
+                    await _unitOfWork.Save();
+                }
             }
-        return NoContent();
-    }
+            return Ok("Covid History Data has been saved...");
+        }
 
     }
 }

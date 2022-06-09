@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestProject.Data;
 
 namespace TestProject.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220609110843_DeleteHistoryId")]
+    partial class DeleteHistoryId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,15 +50,15 @@ namespace TestProject.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b385126e-5eb3-4419-9d48-c4e2f06051b2",
-                            ConcurrencyStamp = "bdf13868-dbfa-43f0-a565-8243b9ed1d1c",
+                            Id = "2d8060e6-d5f3-4781-a7a6-adae6b87c346",
+                            ConcurrencyStamp = "e0875ada-001c-4c50-b49f-b72c41da0546",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "fe5dca2a-7c11-4a29-970b-93d42caab7e8",
-                            ConcurrencyStamp = "20842f70-2f97-44b2-8f9e-c1c365390a35",
+                            Id = "d4031143-738b-4478-a2c0-06793e5635ef",
+                            ConcurrencyStamp = "1e92d0d2-a172-47c7-90e4-cc89721d99b9",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -318,10 +320,6 @@ namespace TestProject.Migrations
 
             modelBuilder.Entity("TestProject.Data.History", b =>
                 {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Active")
                         .HasColumnType("int");
 
@@ -357,8 +355,6 @@ namespace TestProject.Migrations
 
                     b.Property<int>("Recovered")
                         .HasColumnType("int");
-
-                    b.HasKey("ID");
 
                     b.ToTable("Histories");
                 });

@@ -37,7 +37,7 @@ namespace TestProject.DataServices
         }
         public async Task<IEnumerable<CovidHistory>> GetHistory(string country)
         {
-            var response = await _httpClient.GetAsync($"{_configuration["Covid19API"]}/total/country/{country}");
+            var response = await _httpClient.GetAsync($"{_configuration["Covid19API"]}/country/{country}");
 
             if (response.IsSuccessStatusCode)
             {

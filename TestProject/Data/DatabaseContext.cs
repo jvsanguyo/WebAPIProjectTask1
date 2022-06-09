@@ -19,6 +19,7 @@ namespace TestProject.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            //builder.Entity(typeof(History)).HasNoKey();
             builder.ApplyConfiguration(new RoleConfiguration());
         }
     }
