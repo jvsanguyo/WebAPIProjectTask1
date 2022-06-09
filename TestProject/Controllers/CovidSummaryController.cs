@@ -30,7 +30,7 @@ namespace TestProject.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllSummary()
         {
-            var summary = await _unitOfWork.Summaries.GetAll(new List<string> { "Countries" });
+            var summary = await _unitOfWork.Summaries.GetAll(new List<string> { "Global","Countries" });
             var result = _mapper.Map<List<CovidSummary>>(summary);
             return Ok(result);
         }
@@ -70,9 +70,17 @@ namespace TestProject.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var summary = await _unitOfWork.Summaries.Get(q => q.ID == id);
+                var summary = await _unitOfWork.Summaries.Get(q => q.ID == id, new List<string> { "Global", "Countries" });
                 _mapper.Map(covidSummary, summary);
                 _unitOfWork.Summaries.Update(summary);
+
+                _unitOfWork.Global.Update(summary.Global);
+
+                foreach (var item in summary.Countries)
+                {
+                    _unitOfWork.Countries.Update(item);
+                }
+
                 await _unitOfWork.Save();
                 return Ok("Summary has been updated...");
             }

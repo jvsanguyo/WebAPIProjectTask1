@@ -11,6 +11,8 @@ namespace TestProject.Repository
     {
         private readonly DatabaseContext _context;
         private IGenericRepository<Summary> _summaries;
+        private IGenericRepository<Global> _global;
+        private IGenericRepository<Country> _countries;
         private IGenericRepository<History> _histories;
 
         public UnitOfWork(DatabaseContext context)
@@ -18,6 +20,10 @@ namespace TestProject.Repository
             _context = context;
         }
         public IGenericRepository<Summary> Summaries => _summaries ??= new GenericRepository<Summary>(_context);
+
+        public IGenericRepository<Global> Global => _global ??= new GenericRepository<Global>(_context);
+
+        public IGenericRepository<Country> Countries => _countries ??= new GenericRepository<Country>(_context);
 
         public IGenericRepository<History> Histories => _histories ??= new GenericRepository<History>(_context);
 

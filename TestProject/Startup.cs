@@ -25,12 +25,10 @@ namespace TestProject
     {
         
         public IConfiguration Configuration { get; }
-        public readonly IWebHostEnvironment _env;
 
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _env = env;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -63,9 +61,15 @@ namespace TestProject
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CovidReport v1"));
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                string swaggerJsonBasePath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : "..";
+                c.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", "Covid Report API");
+            });
+
+            app.ConfigureExceptionHandler();
 
             app.UseHttpsRedirection();
 

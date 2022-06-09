@@ -54,6 +54,14 @@ namespace TestProject.Repository
         {
             IQueryable<T> query = _db;
 
+            if (includes != null)
+            {
+                foreach (var includeProperty in includes)
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+
             return await query.AsNoTracking().ToListAsync();
         }
 
@@ -72,5 +80,6 @@ namespace TestProject.Repository
             _db.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
         }
+     
     }
 }

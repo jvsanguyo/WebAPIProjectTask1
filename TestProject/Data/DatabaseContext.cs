@@ -16,7 +16,6 @@ namespace TestProject.Data
 
         public DbSet<Summary> Summaries { get; set; }
         public DbSet<History> Histories { get; set; }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
