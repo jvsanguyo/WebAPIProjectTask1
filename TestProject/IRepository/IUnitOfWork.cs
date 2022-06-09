@@ -13,7 +13,6 @@ namespace TestProject.IRepository
         IGenericRepository<Country> Countries { get; }
         IGenericRepository<History> Histories { get; }
         Task Save();
-        bool HasSummaryData();
         bool HasHistoryData();
     }
 }

@@ -33,15 +33,15 @@ namespace TestProject.Controllers
         [Route("getcovidsummary")]
         public async Task<IActionResult> GetCovidSummary()
         {
-            if (!_unitOfWork.HasSummaryData())
-            {
-                var result = await _commandDataClient.GetSummaries();
-                var summary = _mapper.Map<Summary>(result);
-                await _unitOfWork.Summaries.Insert(summary);
-                await _unitOfWork.Save();
-                return Ok("Covid Summary Data has been saved...");
-            }
-            return NoContent();
+            var result = await _commandDataClient.GetSummaries();
+            var data = (await _unitOfWork.Summaries.Get(q => q.ID == result.ID));
+            if (data != null)
+                return NoContent();
+
+            var summary = _mapper.Map<Summary>(result);
+            await _unitOfWork.Summaries.Insert(summary);
+            await _unitOfWork.Save();
+            return Ok("Covid Summary Data has been saved...");
         }
 
         [HttpGet]
@@ -56,9 +56,8 @@ namespace TestProject.Controllers
                 await _unitOfWork.Save();
                 return Ok("Covid History Data has been saved...");
             }
-
-            return NoContent();
-        }
+        return NoContent();
+    }
 
     }
 }

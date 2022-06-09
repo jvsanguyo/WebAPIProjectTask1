@@ -37,12 +37,6 @@ namespace TestProject.Repository
         {
             return _context.Histories.Any();
         }
-
-        public bool HasSummaryData()
-        {
-            return _context.Summaries.Any();
-        }
-
         public async Task Save()
         {
             await _context.SaveChangesAsync();
